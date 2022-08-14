@@ -1,34 +1,53 @@
-amount = 5
-n = [1, 2, 3]
-k = len(n)
+a = [
+    [0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 0],
+    [1, 1, 0, 0, 0],
+    [0, 1, 0, 1, 1],
+    [0, 0, 0, 0, 1]
+]
 
-#creating a matrix
+end_i, end_j = 4, 3
 
-tabular = [[0]*(amount+1) for _ in range(k+1)]
+path_so_far = []
 
-# Logic of the code
-for i in range(k+1):
-    tabular[i][0] = 1
-
-for i in range(1, k+1):
-    for j in range(1, amount+1):
-        if n[i-1] > j:
-            tabular[i][j] = tabular[i-1][j]
-        else:
-            tabular[i][j] = tabular[i-1][j] or tabular[i-1][(j-(n[i-1]))]
-
-#To print the table
-for i in range(amount+1):
-    if i == 0:
-        print('    ', end=" ")
-        print(i,end='  ')
+count = 0
+def go_to(i, j):
+    global path_so_far, end_j, end_i, a, count
+    if i < 0 or j < 0 or i > len(a)-1 or j > len(a[0])-1:
+        return
+    if (i,j) in path_so_far or a[i][j] > 0:
+        return
+    path_so_far.append((i,j))
+    a[i][j] = 2
+    if (i, j) == (end_i, end_j):
+        print("Found", path_so_far)
+        count+=1
+        path_so_far.pop()
+        return
     else:
-        print(i, end='   ')
-print('\n')
-for i in range(k+1):
-    print(i,"  ", end=" ")
-    for j in range(amount+1):
-        print(tabular[i][j], end='   ')
+
+        go_to(i + 1, j)
+        if count == 1:
+            return
+        go_to(i, j + 1)
+        if count == 1:
+            return
+        go_to(i, j - 1)
+        if count == 1:
+            return
+        go_to(i - 1, j)
+
+    # for i in range(5):
+    #     for j in range(5):
+    #         print(a[i][j], end=" ")
+    #     print('\n')
+    # print("------------------------")
+    return
+
+
+go_to(0, 0)
+
+for i in range(5):
+    for j in range(5):
+        print(a[i][j],end=" ")
     print('\n')
-
-
